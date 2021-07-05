@@ -308,12 +308,11 @@ var
 
 function NeedAuxBitmap: TBitmap;
 begin
-  if AuxBitmap = nil then
-  begin
-    AuxBitmap := TRLBitmap.Create;
-    AuxBitmap.Width := 1;
-    AuxBitmap.Height := 1;
-  end;
+  if AuxBitmap <> nil then
+    AuxBitmap.Free;
+  AuxBitmap := TRLBitmap.Create;
+  AuxBitmap.Width := 1;
+  AuxBitmap.Height := 1;
   Result := AuxBitmap;
 end;
 
@@ -1096,7 +1095,7 @@ function SmartGetFieldDisplayText(Field: TField; const Mask: string = ''): Strin
 begin
   if (Field is TBlobField) and not Assigned(Field.OnGetText) then
     Result := Field.AsString
-  else if (Field is TFloatField) and (Mask <> '') then
+  else if (Field is TNumericField) and (Mask <> '') then
     Result := FormatFloat(Mask, Field.AsFloat)
   else
     Result := Field.DisplayText;
